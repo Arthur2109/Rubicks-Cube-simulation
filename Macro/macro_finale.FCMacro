@@ -1,0 +1,488 @@
+
+from fonctions_logique import *
+from fonctions_debug import *
+from constantes import *
+from fonctions_console import *
+global R
+R=0
+doc=FreeCAD.ActiveDocument
+if doc==None:
+	doc = FreeCAD.newDocument()
+
+couleurs={"B":(0.0,0.0,1.0),"G":(0.0,0.5,0.0),"W":(1.0,1.0,1.0),"Y":(1.0,1.0,0.0),"O":(1.0,0.65,0.0),"R":(1.0,0.0,0.0),"N":(0.0,0.0,0.0)}
+
+# applique un mouvement sur une face du cube (logique + objets 3D)
+# rubik : le cube logique
+# rubik_objects : les objets FreeCAD du cube 3D
+# mouv : tuple (f, sens, double) du mouvement à effectuer
+# animation : True pour afficher l'animation correspondante
+
+		
+
+def supprimer_ancien_cube():
+	objs = FreeCAD.ActiveDocument.Objects
+	for obj in objs:
+	    name = obj.Name
+	    doc.removeObject(name)
+	
+			
+def generer_rubik_3D(R):
+	for x in range(3):
+		for y in range(3):
+			for z in range(3):
+				cubelet=doc.addObject("Part::Box","Cubelet")
+				cubelet.Length = 10
+				cubelet.Width = 10
+				cubelet.Height = 10
+				cubelet.Placement = App.Placement(App.Vector(10*x,10*y,10*z),App.Rotation(0,0,0,1))
+				cubelet.ViewObject.ShapeColor=(0.0,0.0,0.0)
+				c=R[x][y][z]
+				cubelet.ViewObject.DiffuseColor=[couleurs[c[2]],couleurs[c[2]],couleurs[c[1]],couleurs[c[1]],couleurs[c[0]],couleurs[c[0]]]
+
+
+def appliquer_mouvement_3D(rubik,mouv,animation):
+    rubik=appliquer_mouvement(rubik, mouv)
+    supprimer_ancien_cube()
+    generer_rubik_3D(rubik)
+    return rubik
+
+########################### interface ############################################################
+
+
+from PySide import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+
+class Ui_MainWindow(object):
+    def __init__(self, MainWindow):
+        self.window = MainWindow
+
+        MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        MainWindow.resize(450, 350)
+        self.centralWidget = QtGui.QWidget(MainWindow)
+        self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
+
+        self.pushButton = QtGui.QPushButton(self.centralWidget)
+        self.pushButton.setGeometry(QtCore.QRect(85, 40, 100, 28))
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.pushButton.clicked.connect(self.on_pushButton_clicked) #connection pushButton
+
+        self.scrambleButton = QtGui.QPushButton(self.centralWidget)
+        self.scrambleButton.setGeometry(QtCore.QRect(220,40, 100, 28))
+        self.scrambleButton.setObjectName(_fromUtf8("scrambleButton"))
+        self.scrambleButton.clicked.connect(self.fonctionScramble)
+
+        self.pushButton_1 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_1.setGeometry(QtCore.QRect(15, 150, 370, 28))
+        self.pushButton_1.setObjectName(_fromUtf8("pushButton1"))
+        self.pushButton_1.clicked.connect(self.on_pushButton_1_clicked)
+
+        self.pushButton_2 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(15, 190, 56, 35))
+        self.pushButton_2.setObjectName(_fromUtf8("pushButton2"))
+        self.pushButton_2.clicked.connect(self.on_pushButton_2_clicked)
+
+        self.pushButton_3 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_3.setGeometry(QtCore.QRect(15, 225, 56, 35))
+        self.pushButton_3.setObjectName(_fromUtf8("pushButton3"))
+        self.pushButton_3.clicked.connect(self.on_pushButton_3_clicked)
+
+        self.pushButton_4 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(15, 260, 56, 35))
+        self.pushButton_4.setObjectName(_fromUtf8("pushButton4"))
+        self.pushButton_4.clicked.connect(self.on_pushButton_4_clicked)
+
+        self.pushButton_5 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_5.setGeometry(QtCore.QRect(75, 190, 56, 35))
+        self.pushButton_5.setObjectName(_fromUtf8("pushButton5"))
+        self.pushButton_5.clicked.connect(self.on_pushButton_5_clicked)
+
+        self.pushButton_6 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(75, 225, 56, 35))
+        self.pushButton_6.setObjectName(_fromUtf8("pushButton6"))
+        self.pushButton_6.clicked.connect(self.on_pushButton_6_clicked)
+
+        self.pushButton_7 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_7.setGeometry(QtCore.QRect(75, 260, 56, 35))
+        self.pushButton_7.setObjectName(_fromUtf8("pushButton7"))
+        self.pushButton_7.clicked.connect(self.on_pushButton_7_clicked)
+
+        self.pushButton_8 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_8.setGeometry(QtCore.QRect(135, 190, 56, 35))
+        self.pushButton_8.setObjectName(_fromUtf8("pushButton8"))
+        self.pushButton_8.clicked.connect(self.on_pushButton_8_clicked)
+
+        self.pushButton_9 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_9.setGeometry(QtCore.QRect(135, 225, 56, 35))
+        self.pushButton_9.setObjectName(_fromUtf8("pushButton9"))
+        self.pushButton_9.clicked.connect(self.on_pushButton_9_clicked)
+
+        self.pushButton_10 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_10.setGeometry(QtCore.QRect(135, 260, 56, 35))
+        self.pushButton_10.setObjectName(_fromUtf8("pushButton10"))
+        self.pushButton_10.clicked.connect(self.on_pushButton_10_clicked)
+
+        self.pushButton_11 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_11.setGeometry(QtCore.QRect(195, 190, 56, 35))
+        self.pushButton_11.setObjectName(_fromUtf8("pushButton11"))
+        self.pushButton_11.clicked.connect(self.on_pushButton_11_clicked)
+
+        self.pushButton_12 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_12.setGeometry(QtCore.QRect(195, 225, 56, 35))
+        self.pushButton_12.setObjectName(_fromUtf8("pushButton12"))
+        self.pushButton_12.clicked.connect(self.on_pushButton_12_clicked)
+
+        self.pushButton_13 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_13.setGeometry(QtCore.QRect(195, 260, 56, 35))
+        self.pushButton_13.setObjectName(_fromUtf8("pushButton13"))
+        self.pushButton_13.clicked.connect(self.on_pushButton_13_clicked)
+
+        self.pushButton_14 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_14.setGeometry(QtCore.QRect(255, 190, 56, 35))
+        self.pushButton_14.setObjectName(_fromUtf8("pushButton14"))
+        self.pushButton_14.clicked.connect(self.on_pushButton_14_clicked)
+
+        self.pushButton_15 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_15.setGeometry(QtCore.QRect(255, 225, 56, 35))
+        self.pushButton_15.setObjectName(_fromUtf8("pushButton15"))
+        self.pushButton_15.clicked.connect(self.on_pushButton_15_clicked)
+
+        self.pushButton_16 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_16.setGeometry(QtCore.QRect(255, 260, 56, 35))
+        self.pushButton_16.setObjectName(_fromUtf8("pushButton16"))
+        self.pushButton_16.clicked.connect(self.on_pushButton_16_clicked)
+
+        self.pushButton_17 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_17.setGeometry(QtCore.QRect(315, 190, 56, 35))
+        self.pushButton_17.setObjectName(_fromUtf8("pushButton17"))
+        self.pushButton_17.clicked.connect(self.on_pushButton_17_clicked)
+
+        self.pushButton_18 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_18.setGeometry(QtCore.QRect(315, 225, 56, 35))
+        self.pushButton_18.setObjectName(_fromUtf8("pushButton18"))
+        self.pushButton_18.clicked.connect(self.on_pushButton_18_clicked)
+
+        self.pushButton_19 = QtGui.QPushButton(self.centralWidget)
+        self.pushButton_19.setGeometry(QtCore.QRect(315, 260, 56, 35))
+        self.pushButton_19.setObjectName(_fromUtf8("pushButton19"))
+        self.pushButton_19.clicked.connect(self.on_pushButton_19_clicked)
+
+        self.lineEdit = QtGui.QLineEdit(self.centralWidget)
+        self.lineEdit.setGeometry(QtCore.QRect(100, 90, 211, 22))
+        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
+        self.lineEdit.returnPressed.connect(self.on_lineEdit_clicked) #connection lineEdit
+
+        self.effacer = QtGui.QPushButton(self.centralWidget)
+        self.effacer.setGeometry(QtCore.QRect(330, 90, 100, 22))
+        self.effacer.setObjectName(_fromUtf8("effacer"))
+        self.effacer.clicked.connect(self.effacer_texte)
+
+        self.ok = QtGui.QPushButton(self.centralWidget)
+        self.ok.setGeometry(QtCore.QRect(130, 120, 150, 22))
+        self.ok.setObjectName(_fromUtf8("ok"))
+        self.ok.clicked.connect(self.fonction_ok)
+
+
+        MainWindow.setCentralWidget(self.centralWidget)
+
+        self.menuBar = QtGui.QMenuBar(MainWindow)
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 400, 26))
+        self.menuBar.setObjectName(_fromUtf8("menuBar"))
+        MainWindow.setMenuBar(self.menuBar)
+
+        self.mainToolBar = QtGui.QToolBar(MainWindow)
+        self.mainToolBar.setObjectName(_fromUtf8("mainToolBar"))
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
+
+        self.statusBar = QtGui.QStatusBar(MainWindow)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        MainWindow.setStatusBar(self.statusBar)
+
+        self.retranslateUi(MainWindow)
+
+
+
+    def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.pushButton.setText(_translate("MainWindow", "aléatoire", None))
+        self.scrambleButton.setText(_translate("MainWindow", "scramble", None))
+        self.pushButton_1.setText(_translate("MainWindow", "Supprimer le cube", None))
+        self.pushButton_2.setText(_translate("MainWindow", "F", None))
+        self.pushButton_3.setText(_translate("MainWindow", "F'", None))
+        self.pushButton_4.setText(_translate("MainWindow", "F2", None))
+        self.pushButton_5.setText(_translate("MainWindow", "B", None))
+        self.pushButton_6.setText(_translate("MainWindow", "B'", None))
+        self.pushButton_7.setText(_translate("MainWindow", "B2", None))
+        self.pushButton_8.setText(_translate("MainWindow", "L", None))
+        self.pushButton_9.setText(_translate("MainWindow", "L'", None))
+        self.pushButton_10.setText(_translate("MainWindow", "L2", None))
+        self.pushButton_11.setText(_translate("MainWindow", "R", None))
+        self.pushButton_12.setText(_translate("MainWindow", "R'", None))
+        self.pushButton_13.setText(_translate("MainWindow", "R2", None))
+        self.pushButton_14.setText(_translate("MainWindow", "U", None))
+        self.pushButton_15.setText(_translate("MainWindow", "U'", None))
+        self.pushButton_16.setText(_translate("MainWindow", "U2", None))
+        self.pushButton_17.setText(_translate("MainWindow", "D", None))
+        self.pushButton_18.setText(_translate("MainWindow", "D'", None))
+        self.pushButton_19.setText(_translate("MainWindow", "D2", None))
+        self.lineEdit.setText(_translate("MainWindow", "Choix du mode", None))
+        self.effacer.setText(_translate("MainWindow", "effacer", None))
+        self.ok.setText(_translate("MainWindow", "ok", None))
+
+
+
+    def on_lineEdit_clicked(self):
+#	    if self.lineEdit.textChanged():
+        App.Console.PrintMessage(str(self.lineEdit.displayText())+" LineEdit Display\r\n")
+    
+    def effacer_texte(self):
+        self.lineEdit.clear()
+
+    def fonctionScramble(self):
+        self.lineEdit.setText(_translate("MainWindow", "Quelle combinaison ?", None))
+
+    def on_pushButton_clicked(self):
+        self.lineEdit.setText(_translate("MainWindow", "Nombre de mouvements", None))
+        
+    def fonction_ok(self):
+        global R
+        texte=self.lineEdit.text()
+
+        if valide(texte):
+            R=generer_rubik_scramble(texte)
+            generer_rubik_3D(R)
+        elif valide_nombre(texte):
+            R=generer_rubik(int(texte))
+            generer_rubik_3D(R)
+        else:
+            self.lineEdit.setText(_translate("MainWindow", "Erreur de syntaxe", None))
+        
+        
+    def on_pushButton_1_clicked(self):
+        supprimer_ancien_cube()
+
+
+    def on_pushButton_2_clicked(self):
+        global R
+        tuple=("F",True,False)
+        appliquer_mouvement_3D(R,tuple,False)       
+
+    def on_pushButton_3_clicked(self):     
+        global R
+        tuple=("F",False,False)
+        appliquer_mouvement_3D(R,tuple,False)   
+
+    def on_pushButton_4_clicked(self):  
+        global R
+        tuple=("F",True,True)
+        appliquer_mouvement_3D(R,tuple,False)   
+
+    def on_pushButton_5_clicked(self): 
+        global R
+        tuple=("B",True,False)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+    def on_pushButton_6_clicked(self):   
+        global R
+        tuple=("B",False,False)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+    def on_pushButton_7_clicked(self):
+        global R
+        tuple=("B",True,True)
+        appliquer_mouvement_3D(R,tuple,False)
+
+    def on_pushButton_8_clicked(self):
+        global R
+        tuple=("L",True,False)
+        appliquer_mouvement_3D(R,tuple,False)
+    
+    def on_pushButton_9_clicked(self):
+        global R
+        tuple=("L",False,False)
+        appliquer_mouvement_3D(R,tuple,False)
+        
+
+    def on_pushButton_10_clicked(self):
+        global R
+        tuple=("L",True,True)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+    def on_pushButton_11_clicked(self):
+        global R
+        tuple=("R",True,False)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+    def on_pushButton_12_clicked(self):
+        global R
+        tuple=("R",False,False)
+        appliquer_mouvement_3D(R,tuple,False)
+       
+
+    def on_pushButton_13_clicked(self):
+        global R
+        tuple=("R",True,True)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def on_pushButton_14_clicked(self):
+        global R
+        tuple=("U",True,False)
+        appliquer_mouvement_3D(R,tuple,False)
+
+    
+    def on_pushButton_15_clicked(self):
+        global R
+        tuple=("U",False,False)
+        appliquer_mouvement_3D(R,tuple,False)
+         
+
+    def on_pushButton_16_clicked(self):
+        global R
+        tuple=("U",True,True)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+    def on_pushButton_17_clicked(self):
+        global R
+        tuple=("D",True,False)
+        appliquer_mouvement_3D(R,tuple,False)
+        
+
+    def on_pushButton_18_clicked(self):
+        global R
+        tuple=("D",False,False)
+        appliquer_mouvement_3D(R,tuple,False)
+        
+    def on_pushButton_19_clicked(self):
+        global R
+        tuple=("D",True,True)
+        appliquer_mouvement_3D(R,tuple,False)
+
+
+Gui.SendMsgToActiveView("ViewFit")
+
+MainWindow = QtGui.QMainWindow()
+ui = Ui_MainWindow(MainWindow)
+MainWindow.show()
+
+
+
+
+
