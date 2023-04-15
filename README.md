@@ -6,11 +6,11 @@ The program checks if the commands entered by the player are syntactically corre
 
 A rotation is executed according to the following logic :
 
--extract the face you want to rotate (extract function)
--we turn this face (apply rotation function)
--we change the orientation of the colors
--we reimplant the face in the rubikub matrix (reimplant function, "inverse" of extract) graphic interface :
--display in the console the new rubikub matrix. It is a rubikub pattern displayed as if it was completely unfolded.
+- extract the face you want to rotate (extract function)
+- we turn this face (apply rotation function)
+- we change the orientation of the colors
+- we reimplant the face in the rubikub matrix (reimplant function, "inverse" of extract) graphic interface :
+- display in the console the new rubikub matrix. It is a rubikub pattern displayed as if it was completely unfolded.
 
 ---ADAPTATION OF THE CODE TO FREECAD FOR THE GRAPHIC INTERFACE IN 3D:---
 
