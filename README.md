@@ -26,12 +26,9 @@ Interface of the game: We now enter the interface part. It is necessary to maxim
 
 As the operation of the buttons is quite similar, we will not develop in depth all the buttons. However, we will focus on the ones that reveal how our program works. But first of all, how does a normal game work? The user chooses his game mode among the two available ones, namely random and scramble. Once you click on one of the two buttons, the text "choice of mode" changes and you are asked to choose either the number of moves or the scramble combination. Once the information is entered, press "ok" and the cube is created. if the syntax is wrong, the entry is deleted and you have to start again. All that is left to do is to play rubik's with the different movements available via the buttons.
 
-    Creation of the button in the widget Here, we create the existence in the widget of the button. We associate its coordinates and its dimensions. We associate a name to this button (here scrambleButton). All that remains is to associate this button with a function (here "functionScramble" defined later).this is done by the function self.scrambleButton.clicked.connect(self.functionScramble).
+Assigning a text to the button
 
-    Assigning a text to the button
+Creation of the button in the widget Here, we create the existence in the widget of the button. We associate its coordinates and its dimensions. We associate a name to this button (here scrambleButton). All that remains is to associate this button with a function (here "functionScramble" defined later).this is done by the function self.scrambleButton.clicked.connect(self.functionScramble).
 
-    Definition of the called function In our case our button will write in the editable area the text "What combination" in order to guide the user on how to proceed Thus, each button is connected to a function. Basically, the scramble and random buttons write a text in the text area, the ok button checks if the input is an integer or a string and adapts the operating mode accordingly. It will then create the cube according to the game mode. The delete button deletes the content of the text box to ensure user comfort. The delete button deletes the current cube. Finally, the different movement buttons allow you to move the cube as you wish. Once the blocks are nested together, the program can run and the user can complete a game from start to finish.
-
-
-
+Definition of the called function In our case our button will write in the editable area the text "What combination" in order to guide the user on how to proceed Thus, each button is connected to a function. Basically, the scramble and random buttons write a text in the text area, the ok button checks if the input is an integer or a string and adapts the operating mode accordingly. It will then create the cube according to the game mode. The delete button deletes the content of the text box to ensure user comfort. The delete button deletes the current cube. Finally, the different movement buttons allow you to move the cube as you wish. Once the blocks are nested together, the program can run and the user can complete a game from start to finish.
 
